@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Zahra Faye</title>
+    <link rel="stylesheet" href="/css/indexstyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Login page specific styles */
+        body {
+            overflow-x: hidden;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 2.5rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+            position: relative;
+            z-index: 100;
+            top: 130px;
+            margin-bottom: 150px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #777;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.9rem;
+            border: 1px solid #eaeaea;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(229, 162, 92, 0.2);
+        }
+
+        .btn-login {
+            width: 100%;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .btn-login:hover {
+            background-color: #d89347;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .signup-link a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        .page-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(52, 69, 78, 0.9), rgba(52, 69, 78, 0.7)), url('/images/img1.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-bg"></div>
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="/" class="logo">ZAHRA FAYE</a>
+        <ul class="nav-links">
+            <li><a href="/exhibitions">Exhibitions</a></li>
+            <li><a href="#workshops">Workshops</a></li>
+            <li><a href="#community">Community</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup" class="btn-signup">Sign Up</a></li>
+        </ul>
+    </nav>
+
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Login</h2>
+            <p>Welcome back! Please login to your account.</p>
+        </div>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+        <div class="signup-link">
+            <p>Don't have an account? <a href="/signup">Sign up</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.status === 200) {
+                    // Store token in localStorage
+                    localStorage.setItem('token', result.data.token);
+                    // Store user info
+                    localStorage.setItem('user', JSON.stringify({
+                        id: result.data.id,
+                        name: result.data.name,
+                        email: result.data.email
+                    }));
+                    // Redirect to dashboard
+                    window.location.href = '/dashboard';
+                } else {
+                    alert(result.msg || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('An error occurred during login');
+            }
+        });
+    </script>
+</body>
+</html>

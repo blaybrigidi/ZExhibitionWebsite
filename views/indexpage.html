@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            background-image: url('img1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            height: 100vh; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: right;
+            color: blanchedalmond;
+            font-size: 500%;
+        }
+
+        p {
+            text-align: right;
+            color: blanchedalmond;
+            font-size: 200%;
+        }
+
+        .login-form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 1rem;
+            border: 1px solid burlywood;
+            border-radius: 5px;
+        }
+
+        .login-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.5rem;
+            color: black;
+            background-color: burlywood;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login</h1>
+    <div class="login-form">
+        <form action="/login" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" class="login-button">Login</button>
+        </form>
+    </div>
+</body>
+</html>
